@@ -33,9 +33,9 @@ app.use((req, res, next) => {
   next();
 });
 
-// Body parser middleware
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+// Body parser middleware (10MB limit for file uploads)
+app.use(bodyParser.json({ limit: '10mb' }));
+app.use(bodyParser.urlencoded({ limit: '10mb', extended: true }));
 
 // Request logging middleware
 app.use((req, res, next) => {

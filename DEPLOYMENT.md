@@ -334,3 +334,5 @@ Herhangi bir sorunla karşılaşırsanız:
 
 **🎉 Başarıyla deploy edildikten sonra backend API'niz hazır!**
 
+
+
