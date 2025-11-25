@@ -2,12 +2,20 @@
   "schemaVersion": 2,
   "dockerfileLines": [
     "FROM node:18-alpine",
+    "RUN apk add --no-cache postgresql-client",
     "WORKDIR /usr/src/app",
     "COPY package*.json ./",
     "RUN npm ci --only=production",
     "COPY . .",
+    "RUN echo '#!/bin/sh' > /start.sh",
+    "RUN echo 'sleep 3' >> /start.sh",
+    "RUN echo 'PGPASSWORD=$DB_PASSWORD psql -h $DB_HOST -U $DB_USER postgres -c \"CREATE DATABASE yangin_guvenlik;\" 2>/dev/null || true' >> /start.sh",
+    "RUN echo 'sleep 2' >> /start.sh",
+    "RUN echo 'cd /usr/src/app && npm run db:init 2>/dev/null || true' >> /start.sh",
+    "RUN echo 'cd /usr/src/app && npm run db:seed 2>/dev/null || true' >> /start.sh",
+    "RUN echo 'cd /usr/src/app && npm start' >> /start.sh",
+    "RUN chmod +x /start.sh",
     "EXPOSE 5000",
-    "CMD [\"npm\", \"start\"]"
+    "CMD [\"/start.sh\"]"
   ]
 }
-
